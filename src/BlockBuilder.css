@@ -1,9 +1,63 @@
 .block-builder {
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.scene-container {
+  width: 800px;
+  height: 600px;
+  border: 1px solid #ccc;
+  margin-top: 20px;
 }
   
 .block-builder h3 {
     margin-bottom: 20px;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.spawn-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.spawn-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.spawn-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.reset-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reset-button:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.reset-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
 } 
