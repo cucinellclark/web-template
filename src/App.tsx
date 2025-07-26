@@ -1,5 +1,6 @@
 import './App.css'
 import HeaderBar from './HeaderBar'
+import BlockBuilder from './BlockBuilder'
 
 function App() {
   return (
@@ -15,8 +16,7 @@ function App() {
           <p>This is the left section content area.</p>
         </section>
         <section className="section-middle">
-          <h3>Middle Section</h3>
-          <p>This is the central content area.</p>
+          <BlockBuilder />
         </section>
         <section className="section-right">
           <h3>Right Section</h3>
