@@ -12,6 +12,15 @@ const schema = a.schema({
       content: a.string(),
     })
     .authorization((allow) => [allow.guest()]),
+  
+  getWeather: a
+    .query()
+    .arguments({
+      city: a.string()
+    })
+    .returns(a.string())
+    .authorization((allow) => [allow.guest()])
+    .handler(a.handler.function('weatherFunction'))
 });
 
 export type Schema = ClientSchema<typeof schema>;

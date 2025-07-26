@@ -4,12 +4,14 @@ import './BlockBuilder.css';
 
 function BlockBuilder() {
   const sceneRef = useRef<HTMLDivElement>(null);
-  const engineRef = useRef(Matter.Engine.create());
+  const engineRef = useRef<Matter.Engine | null>(null);
+  const renderRef = useRef<Matter.Render | null>(null);
+  const runnerRef = useRef<Matter.Runner | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const groundRef = useRef<Matter.Body | null>(null);
 
   const spawnNewBlock = () => {
-    if (!isInitialized) return;
+    if (!isInitialized || !engineRef.current) return;
     
     const engine = engineRef.current;
     // Create a new block at a random position at the top
@@ -27,9 +29,10 @@ function BlockBuilder() {
   };
 
   const resetSimulation = () => {
-    if (!isInitialized) return;
+    if (!isInitialized || !engineRef.current || !renderRef.current) return;
     
     const engine = engineRef.current;
+    const render = renderRef.current;
     
     // Clear all bodies from the world
     Matter.Composite.clear(engine.world, false);
@@ -45,8 +48,7 @@ function BlockBuilder() {
     Matter.Composite.add(engine.world, [ground, boxA, boxB]);
     
     // Re-add mouse constraint
-    const render = engine.render;
-    if (render && render.canvas) {
+    if (render.canvas) {
       const mouse = Matter.Mouse.create(render.canvas);
       const mouseConstraint = Matter.MouseConstraint.create(engine, {
         mouse: mouse,
@@ -69,7 +71,10 @@ function BlockBuilder() {
       return;
     }
 
-    const engine = engineRef.current;
+    // Create fresh engine instance
+    const engine = Matter.Engine.create();
+    engineRef.current = engine;
+
     const render = Matter.Render.create({
       element: scene,
       engine: engine,
@@ -80,9 +85,7 @@ function BlockBuilder() {
         background: '#f8f9fa',
       },
     });
-
-    // Store render reference in engine for reset function
-    engine.render = render;
+    renderRef.current = render;
 
     const ground = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
     groundRef.current = ground;
@@ -108,18 +111,36 @@ function BlockBuilder() {
     render.mouse = mouse;
 
     const runner = Matter.Runner.create();
+    runnerRef.current = runner;
     Matter.Runner.run(runner, engine);
     Matter.Render.run(render);
 
     setIsInitialized(true);
 
     return () => {
-      Matter.Runner.stop(runner);
-      Matter.Render.stop(render);
-      Matter.Engine.clear(engine);
-      render.canvas.remove();
-      render.textures = {};
+      // Proper cleanup sequence
       setIsInitialized(false);
+      
+      if (runnerRef.current) {
+        Matter.Runner.stop(runnerRef.current);
+        runnerRef.current = null;
+      }
+      
+      if (renderRef.current) {
+        Matter.Render.stop(renderRef.current);
+        if (renderRef.current.canvas) {
+          renderRef.current.canvas.remove();
+        }
+        renderRef.current.textures = {};
+        renderRef.current = null;
+      }
+      
+      if (engineRef.current) {
+        Matter.Engine.clear(engineRef.current);
+        engineRef.current = null;
+      }
+      
+      groundRef.current = null;
     };
   }, []);
 

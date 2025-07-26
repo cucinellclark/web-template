@@ -2,6 +2,32 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+## Weather Feature
+
+This application includes a weather display component that shows current weather information. The weather data is fetched from a backend function that uses the OpenWeatherMap API.
+
+### Setting up the Weather Feature
+
+1. **Get an OpenWeatherMap API Key:**
+   - Visit [OpenWeatherMap](https://openweathermap.org/api) and sign up for a free account
+   - Navigate to the API Keys section and generate a new API key
+
+2. **Configure the API Key:**
+   - Update `amplify/functions/weather/resource.ts` and replace `'your-api-key-here'` with your actual API key
+   - Alternatively, set the `OPENWEATHER_API_KEY` environment variable in your Amplify console
+
+3. **Deploy the Backend:**
+   ```bash
+   npx ampx sandbox
+   ```
+
+**Important Notes:**
+- If the API key is not configured, the component will show mock weather data with an error message
+- The app will not crash if the weather service fails - it gracefully falls back to placeholder data
+- Users can search for weather in any city worldwide
+
+The weather component will automatically load weather data for San Francisco by default, and users can search for weather in other cities using the input field.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh

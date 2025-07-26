@@ -1,6 +1,7 @@
 import './App.css'
 import HeaderBar from './HeaderBar'
 import BlockBuilder from './BlockBuilder'
+import WeatherDisplay from './WeatherDisplay'
 
 function App() {
   return (
@@ -8,8 +9,7 @@ function App() {
       <HeaderBar />
       <main className="main-content">
         <section className="section-top">
-          <h3>Top Section</h3>
-          <p>This is the top section content area.</p>
+          <WeatherDisplay />
         </section>
         <section className="section-left">
           <h3>Left Section</h3>
